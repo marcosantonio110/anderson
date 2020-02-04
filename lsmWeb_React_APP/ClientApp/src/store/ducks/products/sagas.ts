@@ -2,7 +2,7 @@ import { call, put, all, takeLatest } from "redux-saga/effects";
 
 import { api } from "~/services/api";
 
-import { ProductsTypes } from "./types";
+import { ProductsTypes, ProductList } from "./types";
 import {
   getListProductsRequest,
   getListProductsSuccess,
@@ -20,6 +20,31 @@ function* getListProducts({
 }: ReturnType<typeof getListProductsRequest>) {
   try {
     const response = yield call(api.get, "/api/v1/BOM/GetListProduto");
+
+    interface Linhas {
+      id: number;
+      linha: string;
+    }
+    const linhas: Linhas[] = [];
+
+    response.data.forEach((lists: ProductList, index: number) => {
+      if (lists.linha !== null && lists.cliente !== null) {
+        if (linhas.length < 1) {
+          console.log("IF");
+          linhas.push({
+            id: lists.produto.idLinha,
+            linha: lists.linha
+          });
+        } else {
+          if (linhas) {
+            console.log("1");
+          }
+          console.log("ELSE");
+        }
+      }
+    });
+    console.log("linhas:", linhas);
+    // console.log("response.data:", response.data);
 
     yield put(getListProductsSuccess(response.data));
   } catch (error) {

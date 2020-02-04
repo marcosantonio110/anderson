@@ -2,17 +2,26 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators, Dispatch } from "redux";
 
+import { FaRegSave, MdClear } from "react-icons/all";
+
 import { Typeahead } from "react-bootstrap-typeahead";
-import "react-bootstrap-typeahead/css/Typeahead.css";
 
 import { ApplicationState } from "~/store";
 import { ProductList, AutoCompleteTags } from "~/store/ducks/products/types";
 import * as productsActions from "~/store/ducks/products/actions";
 
-import CnxDataTable from "~/Components/library/CnxDataTables";
+import CnxDataTable from "~/pages/Producs/dataTable";
+// import CnxDataTable from "~/Components/library/CnxDataTables";
 import CnxButtonIcon from "~/Components/library/CnxIcon";
+import CnxInput from "~/Components/library/CnxInput";
+import CnxButton from "~/Components/library/CnxButton";
 
-import { BaseModal, HeaderModal } from "~/Components/library/CnxModal";
+import {
+  BaseModal,
+  HeaderModal,
+  ModalBody,
+  CnxModalFooter
+} from "~/Components/library/CnxModal";
 
 import { Container } from "./styles";
 
@@ -21,6 +30,7 @@ interface LocalState {
   selectedProducts: AutoCompleteTags[];
   selectedClient: AutoCompleteTags[];
   selectedModels: AutoCompleteTags[];
+  isOpenModal: boolean;
 }
 
 interface StateProps {
@@ -42,7 +52,8 @@ class Products extends Component<Props> {
     listtable: [],
     selectedClient: [],
     selectedProducts: [],
-    selectedModels: []
+    selectedModels: [],
+    isOpenModal: false
   };
 
   componentDidMount() {
@@ -179,12 +190,110 @@ class Products extends Component<Props> {
 
   render() {
     const { tags, models, clients } = this.props;
+    const { isOpenModal } = this.state;
 
     return (
       <Container>
-        <BaseModal isOpenModal={true}>
-          <HeaderModal titleHeader="Produto" />
+        <BaseModal isOpenModal={isOpenModal}>
+          <HeaderModal
+            titleHeader="Cadastro de produto"
+            funcClose={() => this.setState({ isOpenModal: false })}
+            funcMaximize={() => console.log("funcMaximize")}
+          />
+          <ModalBody>
+            <div className="cnx-row">
+              <div className="cnx-input-container">
+                <label className="control-label">Produto</label>
+                <Typeahead
+                  id="codigoId"
+                  options={tags}
+                  placeholder="Código do produto"
+                  onChange={e => {
+                    this.setState({
+                      ...this.state.selectedProducts,
+                      selectedProducts: e
+                    });
+                  }}
+                />
+              </div>
+              <div className="cnx-input-container">
+                <label className="control-label">Modelo</label>
+                <CnxInput
+                  value=""
+                  placeholder="Digite um modelo"
+                  onChange={e => {}}
+                />
+              </div>
+              <div className="cnx-input-container">
+                <label className="control-label">Rev</label>
+                <CnxInput
+                  value=""
+                  placeholder="Digite um Rev"
+                  onChange={e => {}}
+                />
+              </div>
+            </div>
+
+            <div className="cnx-row">
+              <div className="cnx-input-container">
+                <label className="control-label">Cliente</label>
+                <Typeahead
+                  id="ClientesId"
+                  options={clients}
+                  multiple={true}
+                  placeholder="Digite um Clientes"
+                  onChange={e => {
+                    this.setState({
+                      ...this.state.selectedClient,
+                      selectedClient: e
+                    });
+                  }}
+                />
+              </div>
+              <div className="cnx-input-container">
+                <label className="control-label">Código Cliente</label>
+                <CnxInput
+                  value=""
+                  placeholder="Digite o Código de Cliente"
+                  onChange={e => {}}
+                />
+              </div>
+              <div className="cnx-input-container">
+                <label className="control-label">Linha</label>
+                <Typeahead
+                  id="ClientesId"
+                  options={clients}
+                  multiple={true}
+                  placeholder="Informe uma linha"
+                  onChange={e => {
+                    this.setState({
+                      ...this.state.selectedClient,
+                      selectedClient: e
+                    });
+                  }}
+                />
+              </div>
+            </div>
+
+            <div className="cnx-row">
+              <CnxButton cnxBtnColor="success" cnxTextColor="text-white">
+                <FaRegSave />
+                <span>Salvar</span>
+              </CnxButton>
+              <CnxButton cnxBtnColor="clear" cnxTextColor="text-dark">
+                <MdClear />
+                <span>Limpar</span>
+              </CnxButton>
+            </div>
+          </ModalBody>
+          <CnxModalFooter
+            titleOne="Anexos"
+            titleTwo="Historico"
+            contentOne={<span>Olá, AMIGO contentOne</span>}
+            contentTwo={<span>Olá, AMIGO contentTwo</span>}
+          />
         </BaseModal>
+
         <div className="header_search">
           <div className="header_search_container_item" id="Produts">
             <label className="control-label">Produto</label>
@@ -242,7 +351,10 @@ class Products extends Component<Props> {
         </div>
 
         <div className="container_dataTables">
-          <CnxDataTable data={this.state.listtable} />
+          <CnxDataTable
+            openModal={() => this.setState({ isOpenModal: true })}
+            data={this.state.listtable}
+          />
         </div>
       </Container>
     );

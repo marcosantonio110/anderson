@@ -24,8 +24,8 @@ export interface Poduct {
   dataHoraUltimoStatus?: string;
   xml?: any;
   instrucaoPDF?: any;
-  idCliente?: number;
-  idLinha?: number;
+  idCliente: number;
+  idLinha: number;
   taktTime?: any;
   tempoMontagem?: any;
   retrabalhoTodas?: any;
@@ -44,8 +44,8 @@ export interface AutoCompleteTags {
 
 export interface ProductList {
   produto: Poduct;
-  linha?: string;
-  cliente?: string;
+  linha: string;
+  cliente: string;
 }
 
 export interface ListClient {

@@ -1,15 +1,27 @@
-import React from 'react';
+import React from "react";
 
-import {Button} from './styles'
+import { Button } from "./styles";
 
-interface Props extends React.ButtonHTMLAttributes<HTMLButtonElement> {}
+interface Props extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+  cnxBtnColor?: string;
+  cnxTextColor?: string;
+}
 
-export const CnxButton: React.FC<Props> = ({ children, ...shared }) => {
-  return <Button {...shared}>{children}</Button>;
+export const CnxButton: React.FC<Props> = ({
+  cnxBtnColor,
+  children,
+  cnxTextColor,
+  ...shared
+}) => {
+  return (
+    <Button cnxBtnColor={cnxBtnColor} cnxTextColor={cnxTextColor} {...shared}>
+      {children}
+    </Button>
+  );
 };
 
 CnxButton.defaultProps = {
-  type: 'button',
+  type: "button"
 };
 
 export default CnxButton;

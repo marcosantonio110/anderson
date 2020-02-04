@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-// import "./style.css";
+import "./style.css";
 
 import { FaWindowMaximize } from "react-icons/fa";
 
@@ -18,7 +18,7 @@ export default class CnxModal extends Component {
 
   render() {
     return (
-      <div id="modalLateral" className="d-none">
+      <div id="modalLateral" className="">
         <div className="row">
           <div className="col-xs-6 col-sm-6 col-md-6">
             <h5 id="ModalLateralTitulo" style={{ float: "left" }}>

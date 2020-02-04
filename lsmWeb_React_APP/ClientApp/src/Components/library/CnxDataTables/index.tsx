@@ -1,5 +1,9 @@
 import React, { Component } from "react";
+import { connect } from "react-redux";
+import { bindActionCreators, Dispatch } from "redux";
+
 import DataTable from "react-data-table-component";
+import { Typeahead } from "react-bootstrap-typeahead";
 
 import Axios from "axios";
 
@@ -11,7 +15,13 @@ import CnxButtonIcon from "~/Components/library/CnxIcon";
 
 import Exportt from "~/Components/library/CnxExportExcel";
 
+import { ApplicationState } from "~/store";
+import { ProductList, AutoCompleteTags } from "~/store/ducks/products/types";
+import * as productsActions from "~/store/ducks/products/actions";
+
+//@ts-ignore
 function convertArrayOfObjectsToCSV(array) {
+  //@ts-ignore
   let result;
 
   const columnDelimiter = ",";
@@ -21,22 +31,24 @@ function convertArrayOfObjectsToCSV(array) {
   result = "";
   result += keys.join(columnDelimiter);
   result += lineDelimiter;
-
+  //@ts-ignore
   array.forEach(item => {
     let ctr = 0;
     keys.forEach(key => {
+      //@ts-ignore
       if (ctr > 0) result += columnDelimiter;
-
+      //@ts-ignore
       result += item[key];
 
       ctr++;
     });
+    //@ts-ignore
     result += lineDelimiter;
   });
 
   return result;
 }
-
+//@ts-ignore
 function downloadCSV(array) {
   const link = document.createElement("a");
   let csv = convertArrayOfObjectsToCSV(array);
@@ -52,8 +64,9 @@ function downloadCSV(array) {
   link.setAttribute("download", filename);
   link.click();
 }
-
+//@ts-ignore
 const Export = ({ onExport }) => (
+  //@ts-ignore
   <button onClick={e => onExport(e.target.value)}>Export</button>
 );
 
@@ -88,7 +101,13 @@ const columns = [
   }
 ];
 
-export default class MyComponent extends Component {
+interface LocalState {
+  data: AutoCompleteTags[];
+}
+
+type Props = LocalState;
+
+class CnxTable extends Component<Props> {
   state = {
     id: 0,
     produto: "",
@@ -98,25 +117,30 @@ export default class MyComponent extends Component {
     codigoCliente: "",
     linha: ""
   };
-
+  //@ts-ignore
   constructor(props) {
     super(props);
     this.openModal = this.openModal.bind(this);
     this.save = this.save.bind(this);
   }
-
+  //@ts-ignore
   openModal(e) {
     const el = document.querySelector("#modalLateral");
+    //@ts-ignore
     el.style.right = "0";
+    //@ts-ignore
     el.style.opacity = "1";
+    //@ts-ignore
     el.style.zIndex = "999";
 
     if (e.id) {
+      //@ts-ignore
       this.setState({
         ...this.setState,
         produto: e.id,
         modelo: e.modelo,
         cliente: e.cliente,
+        //@ts-ignore
         modelo: e.modelo,
         rev: e.revisao,
         codigoCliente: e.cod_cliente
@@ -169,13 +193,15 @@ export default class MyComponent extends Component {
   }
 
   render() {
+    const { data } = this.props;
     return (
       <div>
         <DataTable
           noDataComponent={<b style={{ fontSize: "20px" }}>Nenhum registro</b>}
           noHeader={true}
           columns={columns}
-          data={this.props.data}
+          //@ts-ignore
+          data={data}
           fixedHeader={true}
           fixedHeaderScrollHeight="380px"
           pagination={true}
@@ -186,6 +212,7 @@ export default class MyComponent extends Component {
           }}
           striped={true}
           selectableRows={true}
+          //@ts-ignore
           selecionávelRowsHighlight={true}
           highlightOnHover={true}
           subHeader={true}
@@ -273,11 +300,19 @@ export default class MyComponent extends Component {
 
             <div className="item">
               <label className="control-label">Linha</label>
-              <CnxInput
+              {/* <CnxInput
                 value={this.state.linha}
                 onChange={e => this.setState({ ...this.setState, linha: e })}
                 placeholder="Digite a linha"
                 className="form-control "
+              /> */}
+              <Typeahead
+                id="idLinha"
+                options={[]}
+                placeholder="informe uma linha"
+                onChange={e => {
+                  this.setState({});
+                }}
               />
             </div>
           </div>
@@ -319,3 +354,15 @@ export default class MyComponent extends Component {
     );
   }
 }
+
+const mapStateToProps = (state: ApplicationState) => ({
+  clients: state.listProducts.listClient.map((items, index) => {
+    return { id: index, label: items.cliente };
+  })
+});
+
+const mapDispatchToProps = (dispatch: Dispatch) => ({
+  ...bindActionCreators(productsActions, dispatch)
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(CnxTable);
