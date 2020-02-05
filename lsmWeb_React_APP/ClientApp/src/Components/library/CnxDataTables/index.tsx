@@ -227,15 +227,18 @@ class CnxTable extends Component<Props> {
               }}
             >
               <CnxButtonIcon
-                style="default actionBtn"
+                className="btn btn-default actionBtn"
                 icon="plus text-success"
                 onClick={this.openModal}
               />
               <CnxButtonIcon
-                style="default actionBtn"
+                className="btn btn-default actionBtn"
                 icon="print text-primary"
               />
-              <CnxButtonIcon style="default actionBtn" icon="trash-o gold" />
+              <CnxButtonIcon
+                className="btn btn-default actionBtn"
+                icon="trash-o gold"
+              />
 
               <Exportt data={this.props.data} />
             </div>
@@ -356,9 +359,9 @@ class CnxTable extends Component<Props> {
 }
 
 const mapStateToProps = (state: ApplicationState) => ({
-  clients: state.listProducts.listClient.map((items, index) => {
-    return { id: index, label: items.cliente };
-  })
+  // clients: state.listProducts.listClient.map((items, index) => {
+  //   return { id: index, label: items.cliente };
+  // })
 });
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({

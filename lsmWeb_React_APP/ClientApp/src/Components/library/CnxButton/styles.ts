@@ -9,23 +9,18 @@ const setBgColor = (value: string): string => {
   switch (value) {
     case "primary":
       return "#007bff";
-      break;
     case "success":
       return "#449d44";
-      break;
     case "danger":
       return "#dc3545";
-      break;
     case "warning":
       return "#ffc107";
-      break;
     case "clear":
       return "#f0f0f0";
-      break;
-
+    case "clear-outline":
+      return "#f0f0f0";
     default:
       return "";
-      break;
   }
 };
 
@@ -33,29 +28,20 @@ const setColor = (value: string): string => {
   switch (value) {
     case "text-primary":
       return "#007bff";
-      break;
     case "text-success":
       return "#449d44";
-      break;
     case "text-danger":
       return "#dc3545";
-      break;
     case "text-warning":
       return "#ffc107";
-      break;
     case "text-secondary":
       return "#6c757d";
-      break;
     case "text-white":
       return "#FFF";
-      break;
     case "text-dark":
       return "#343a40";
-      break;
-
     default:
       return "";
-      break;
   }
 };
 

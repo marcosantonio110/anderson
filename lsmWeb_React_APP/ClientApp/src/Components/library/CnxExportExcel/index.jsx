@@ -13,7 +13,7 @@ export default class Download extends Component {
       <ExcelFile
         element={
           <CnxButtonIcon
-            style="default actionBtn"
+            className="btn btn-default actionBtn"
             icon="file-excel-o text-success"
           />
         }

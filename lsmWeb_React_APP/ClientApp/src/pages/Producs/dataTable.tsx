@@ -4,47 +4,62 @@ import DataTable from "react-data-table-component";
 import CnxButtonIcon from "~/Components/library/CnxIcon";
 import Exportt from "~/Components/library/CnxExportExcel";
 
-import { AutoCompleteTags } from "~/store/ducks/products/types";
-
-const columns = [
-  {
-    name: "Produto",
-    selector: "produto",
-    sortable: true
-  },
-  {
-    name: "Modelo",
-    selector: "modelo",
-    sortable: true
-  },
-
-  {
-    name: "Revisão",
-    selector: "revisao",
-    sortable: true
-  },
-
-  {
-    name: "Cliente",
-    selector: "cliente",
-    sortable: true
-  },
-
-  {
-    name: "Código cliente",
-    selector: "codCliente",
-    sortable: true
-  }
-];
-
 interface LocalState {
-  data: AutoCompleteTags[];
+  data: any;
   openModal(): void;
+}
+
+function selectedRow() {
+  console.log("Ola");
 }
 
 type Props = LocalState;
 
 class CnxTable extends Component<Props> {
+  //@ts-ignore
+  actionProduto = row => {
+    console.log("OLAOLAOL", row);
+  };
+
+  columns: any = [
+    {
+      name: "Produto",
+      selector: "produto",
+      sortable: true,
+      //@ts-ignore
+      cell: row => (
+        <span
+          className="actionDatatabls"
+          onClick={() => this.actionProduto(row)}
+        >
+          {row.produto}
+        </span>
+      )
+    },
+    {
+      name: "Modelo",
+      selector: "modelo",
+      sortable: true
+    },
+
+    {
+      name: "Revisão",
+      selector: "revisao",
+      sortable: true
+    },
+
+    {
+      name: "Cliente",
+      selector: "cliente",
+      sortable: true
+    },
+
+    {
+      name: "Código cliente",
+      selector: "codCliente",
+      sortable: true
+    }
+  ];
   render() {
     const { data, openModal } = this.props;
     return (
@@ -52,8 +67,7 @@ class CnxTable extends Component<Props> {
         <DataTable
           noDataComponent={<b style={{ fontSize: "20px" }}>Nenhum registro</b>}
           noHeader={true}
-          columns={columns}
-          //@ts-ignore
+          columns={this.columns}
           data={data}
           fixedHeader={true}
           fixedHeaderScrollHeight="380px"
@@ -80,21 +94,24 @@ class CnxTable extends Component<Props> {
               }}
             >
               <CnxButtonIcon
-                style="default actionBtn"
+                className="btn btn-default actionBtn"
                 icon="plus text-success"
                 onClick={openModal}
               />
               <CnxButtonIcon
-                style="default actionBtn"
+                className="btn btn-default actionBtn"
                 icon="print text-primary"
               />
-              <CnxButtonIcon style="default actionBtn" icon="trash-o gold" />
+              <CnxButtonIcon
+                className="btn btn-default actionBtn"
+                icon="trash-o gold"
+              />
 
-              <Exportt data={this.props.data} />
+              <Exportt data={data} />
             </div>
           }
           subHeaderAlign="left"
-          onRowClicked={e => {}}
+          Selected={selectedRow}
         />
       </div>
     );
